@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 const navigation = [
   { name: 'Users', href: '/users', icon: Users },
   { name: 'Applications', href: '/apps', icon: Settings },
-  { name: 'Setup', href: '/setup', icon: Database },
+ /* { name: 'Setup', href: '/setup', icon: Database }, */
 ]
 
 export function AppLayout() {
