@@ -1,8 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from './database.types'
 
+console.log('Available env vars:', import.meta.env)
+console.log('VITE_SUPABASE_URL:', import.meta.env.VITE_SUPABASE_URL)
+console.log('SUPABASE_URL:', import.meta.env.SUPABASE_URL)
+console.log('VITE_SUPABASE_ANON_KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY)
+console.log('SUPABASE_PUBLISHABLE_KEY:', import.meta.env.SUPABASE_PUBLISHABLE_KEY)
+
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_ANON_KEY
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_PUBLISHABLE_KEY
+
+console.log('Final supabaseUrl:', supabaseUrl)
+console.log('Final supabaseAnonKey:', supabaseAnonKey)
 
 if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
