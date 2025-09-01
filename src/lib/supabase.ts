@@ -1,46 +1,49 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from './database.types'
 
-console.log('🔍 Supabase module loading...')
+console.log('🔍 Checking for Supabase integration...')
 console.log('Available env vars:', Object.keys(import.meta.env))
-console.log('SUPABASE_URL:', import.meta.env.SUPABASE_URL)
-console.log('SUPABASE_PUBLISHABLE_KEY:', import.meta.env.SUPABASE_PUBLISHABLE_KEY)
 
-// Try different possible environment variable names
-const supabaseUrl = import.meta.env.SUPABASE_URL || 
-                   import.meta.env.VITE_SUPABASE_URL ||
-                   import.meta.env.NEXT_PUBLIC_SUPABASE_URL
+// Check if Lovable provides Supabase through different means
+console.log('Checking window object for Supabase config...')
+console.log('window.SUPABASE_URL:', (window as any).SUPABASE_URL)
+console.log('window.SUPABASE_KEY:', (window as any).SUPABASE_KEY)
 
-const supabaseAnonKey = import.meta.env.SUPABASE_PUBLISHABLE_KEY || 
-                       import.meta.env.SUPABASE_ANON_KEY ||
-                       import.meta.env.VITE_SUPABASE_ANON_KEY ||
-                       import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+// Try all possible environment variable patterns
+const possibleUrls = [
+  import.meta.env.SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_URL, 
+  import.meta.env.NEXT_PUBLIC_SUPABASE_URL,
+  import.meta.env.REACT_APP_SUPABASE_URL,
+  (window as any).SUPABASE_URL
+]
 
-console.log('Final URL:', supabaseUrl)
-console.log('Final Key:', supabaseAnonKey ? 'Found' : 'Missing')
+const possibleKeys = [
+  import.meta.env.SUPABASE_PUBLISHABLE_KEY,
+  import.meta.env.SUPABASE_ANON_KEY,
+  import.meta.env.VITE_SUPABASE_ANON_KEY,
+  import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  import.meta.env.REACT_APP_SUPABASE_ANON_KEY,
+  (window as any).SUPABASE_KEY,
+  (window as any).SUPABASE_ANON_KEY
+]
 
-// Don't throw immediately - create a fallback client that will show helpful errors
-let supabase: any
+const supabaseUrl = possibleUrls.find(url => url && url !== 'undefined')
+const supabaseKey = possibleKeys.find(key => key && key !== 'undefined')
 
-if (supabaseUrl && supabaseAnonKey) {
-  console.log('✅ Creating Supabase client with found credentials')
-  supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
-} else {
-  console.error('❌ Missing Supabase environment variables')
-  console.error('Available keys:', Object.keys(import.meta.env))
-  
-  // Create a dummy client that will show helpful error messages
-  supabase = {
-    from: () => ({
-      select: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
-      insert: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
-      update: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
-      delete: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.'))
-    })
-  }
-}
+console.log('Found URL:', supabaseUrl ? 'Yes' : 'No')
+console.log('Found Key:', supabaseKey ? 'Yes' : 'No')
 
-export { supabase }
+// REPLACE THESE with your actual Supabase credentials from your dashboard
+const DEMO_SUPABASE_URL = 'https://your-project-id.supabase.co'  // ← Put your URL here
+const DEMO_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'  // ← Put your anon key here
+
+console.log('🚨 USING DEMO CREDENTIALS - PLEASE UPDATE WITH YOUR ACTUAL SUPABASE CREDENTIALS')
+
+export const supabase = createClient<Database>(
+  supabaseUrl || DEMO_SUPABASE_URL,
+  supabaseKey || DEMO_SUPABASE_KEY
+)
 
 // Helper functions for data access
 export const supabaseService = {
