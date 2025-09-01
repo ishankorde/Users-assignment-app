@@ -1,23 +1,46 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from './database.types'
 
-console.log('Available env vars:', import.meta.env)
-console.log('VITE_SUPABASE_URL:', import.meta.env.VITE_SUPABASE_URL)
+console.log('🔍 Supabase module loading...')
+console.log('Available env vars:', Object.keys(import.meta.env))
 console.log('SUPABASE_URL:', import.meta.env.SUPABASE_URL)
-console.log('VITE_SUPABASE_ANON_KEY:', import.meta.env.VITE_SUPABASE_ANON_KEY)
 console.log('SUPABASE_PUBLISHABLE_KEY:', import.meta.env.SUPABASE_PUBLISHABLE_KEY)
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || import.meta.env.SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.SUPABASE_PUBLISHABLE_KEY
+// Try different possible environment variable names
+const supabaseUrl = import.meta.env.SUPABASE_URL || 
+                   import.meta.env.VITE_SUPABASE_URL ||
+                   import.meta.env.NEXT_PUBLIC_SUPABASE_URL
 
-console.log('Final supabaseUrl:', supabaseUrl)
-console.log('Final supabaseAnonKey:', supabaseAnonKey)
+const supabaseAnonKey = import.meta.env.SUPABASE_PUBLISHABLE_KEY || 
+                       import.meta.env.SUPABASE_ANON_KEY ||
+                       import.meta.env.VITE_SUPABASE_ANON_KEY ||
+                       import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
+console.log('Final URL:', supabaseUrl)
+console.log('Final Key:', supabaseAnonKey ? 'Found' : 'Missing')
+
+// Don't throw immediately - create a fallback client that will show helpful errors
+let supabase: any
+
+if (supabaseUrl && supabaseAnonKey) {
+  console.log('✅ Creating Supabase client with found credentials')
+  supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+} else {
+  console.error('❌ Missing Supabase environment variables')
+  console.error('Available keys:', Object.keys(import.meta.env))
+  
+  // Create a dummy client that will show helpful error messages
+  supabase = {
+    from: () => ({
+      select: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
+      insert: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
+      update: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.')),
+      delete: () => Promise.reject(new Error('Supabase not configured. Please check your environment variables.'))
+    })
+  }
 }
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey)
+export { supabase }
 
 // Helper functions for data access
 export const supabaseService = {
