@@ -35,8 +35,8 @@ console.log('Found URL:', supabaseUrl ? 'Yes' : 'No')
 console.log('Found Key:', supabaseKey ? 'Yes' : 'No')
 
 // REPLACE THESE with your actual Supabase credentials from your dashboard
-const DEMO_SUPABASE_URL = 'https://your-project-id.supabase.co'  // ← Put your URL here
-const DEMO_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'  // ← Put your anon key here
+const DEMO_SUPABASE_URL = 'https://pruukycurajwhnyesnen.supabase.co'  // ← Put your URL here
+const DEMO_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBydXVreWN1cmFqd2hueWVzbmVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3NDU3MTYsImV4cCI6MjA3MjMyMTcxNn0.ZBp1rVUw1Tb5xnuP0mK6BvvMq86FfZdNMfU9BWWbW3w'  // ← Put your anon key here
 
 console.log('🚨 USING DEMO CREDENTIALS - PLEASE UPDATE WITH YOUR ACTUAL SUPABASE CREDENTIALS')
 
