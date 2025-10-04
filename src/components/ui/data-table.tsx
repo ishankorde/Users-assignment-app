@@ -126,21 +126,21 @@ export function DataTable<T extends Record<string, any>>({
       {/* Table */}
       <div className="border rounded-lg">
         <Table>
-          <TableHeader>
-            <TableRow>
+          <TableHeader className="bg-table-header">
+            <TableRow className="hover:bg-table-header">
               {columns.map((column, index) => (
                 <TableHead key={index}>
                   {column.sortable ? (
                     <Button
                       variant="ghost"
                       onClick={() => handleSort(column)}
-                      className="h-auto p-0 font-medium text-left justify-start"
+                      className="h-auto p-0 font-medium text-left justify-start text-table-header-foreground hover:bg-table-header"
                     >
                       {column.label}
                       {getSortIcon(column)}
                     </Button>
                   ) : (
-                    column.label
+                    <span className="text-table-header-foreground font-medium">{column.label}</span>
                   )}
                 </TableHead>
               ))}
